@@ -1,0 +1,53 @@
+{
+  "📁 プロジェクト": [
+    {
+      "title": "GitHub",
+      "url": "https://github.com",
+      "description": "コード管理とコラボレーション"
+    },
+    {
+      "title": "Notion",
+      "url": "https://www.notion.so/",
+      "description": "ドキュメントとプロジェクト管理"
+    },
+    {
+      "title": "Trello",
+      "url": "https://trello.com/",
+      "description": "タスク管理ボード"
+    }
+  ],
+  "🌐 日常サイト": [
+    {
+      "title": "YouTube",
+      "url": "https://youtube.com",
+      "description": "動画視聴とエンタメ"
+    },
+    {
+      "title": "Twitter / X",
+      "url": "https://twitter.com",
+      "description": "ニュースと交流"
+    },
+    {
+      "title": "Gmail",
+      "url": "https://mail.google.com",
+      "description": "メールチェック"
+    }
+  ],
+  "💡 学習・情報収集": [
+    {
+      "title": "Qiita",
+      "url": "https://qiita.com/",
+      "description": "日本語の技術記事"
+    },
+    {
+      "title": "Zenn",
+      "url": "https://zenn.dev/",
+      "description": "開発者向けの学習記事"
+    },
+    {
+      "title": "MDN Web Docs",
+      "url": "https://developer.mozilla.org/ja/",
+      "description": "Web技術の公式ドキュメント"
+    }
+  ]
+}

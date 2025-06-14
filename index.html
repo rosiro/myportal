@@ -1,26 +1,54 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>スタートダッシュボード（編集可能）</title>
+    <title>スタートダッシュボード</title>
     <style>
-        /* --- 既存デザインそのまま --- */
         * {
-            margin: 0; padding: 0; box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
             color: #e0e0e0;
             padding: 2rem;
         }
-        .container { max-width: 1400px; margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 3rem; }
-        .header h1 { font-size: 3rem; font-weight: 300; margin-bottom: 0.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-        .header .date-time { font-size: 1.2rem; opacity: 0.9; }
-        .dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header .date-time {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
         .section {
             background: rgba(20, 20, 30, 0.7);
             backdrop-filter: blur(10px);
@@ -29,6 +57,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
+
         .section h2 {
             font-size: 1.8rem;
             margin-bottom: 1.5rem;
@@ -37,16 +66,21 @@
             align-items: center;
             gap: 0.5rem;
         }
+
         .section h2::before {
-            content: ''; width: 4px; height: 30px;
+            content: '';
+            width: 4px;
+            height: 30px;
             background: linear-gradient(45deg, #ff6b6b, #feca57);
             border-radius: 2px;
         }
+
         .links-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1rem;
         }
+
         .link-card {
             background: rgba(30, 30, 40, 0.6);
             border-radius: 12px;
@@ -58,23 +92,133 @@
             position: relative;
             overflow: hidden;
         }
+
+        .link-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .link-card:hover::before {
+            left: 100%;
+        }
+
         .link-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
             background: rgba(40, 40, 50, 0.8);
         }
-        .link-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
-        .link-description { font-size: 0.9rem; opacity: 0.8; line-height: 1.4; }
-        .editor { margin-bottom: 2rem; text-align: center; }
-        .editor input, .editor textarea {
-            margin: 0.5rem; padding: 0.5rem; border-radius: 5px; border: none;
+
+        .link-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
         }
-        .editor button {
-            background: #444; color: white; border: none; padding: 0.5rem 1rem;
-            border-radius: 5px; cursor: pointer;
+
+        .link-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.4;
+            position: relative;
+            z-index: 1;
+        }
+
+        .quick-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-action {
+            background: rgba(30, 30, 40, 0.7);
+            border: none;
+            color: #e0e0e0;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .quick-action:hover {
+            background: rgba(40, 40, 50, 0.9);
+            transform: scale(1.05);
+        }
+
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 3rem 1rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            background: rgba(20, 20, 30, 0.8);
+            color: #e0e0e0;
+            font-size: 1.1rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: rgba(30, 30, 40, 0.9);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .links-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -82,93 +226,107 @@
             <div class="date-time" id="dateTime"></div>
         </div>
 
-        <div class="editor">
-            <input type="text" id="siteTitle" placeholder="タイトル">
-            <input type="text" id="siteURL" placeholder="URL">
-            <input type="text" id="siteDesc" placeholder="説明">
-            <button onclick="addSite()">サイト追加</button>
-            <button onclick="exportSites()">JSON保存</button>
-            <input type="file" onchange="importSites(event)">
+        <div class="search-bar">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Googleで検索..." id="searchInput">
+                <button class="search-btn" onclick="performSearch()">🔍</button>
+            </div>
         </div>
 
-        <div class="dashboard">
-            <div class="section">
-                <h2>🌐 サイト一覧</h2>
-                <div class="links-grid" id="siteList"></div>
-            </div>
+        <div id="dashboardContainer" class="dashboard"></div>
+
+        <div class="quick-actions">
+            <a href="#" class="quick-action" onclick="openCustomLink('https://drive.google.com')">📁 Google Drive</a>
+            <a href="#" class="quick-action" onclick="openCustomLink('https://translate.google.com')">🌐 翻訳</a>
+            <a href="#" class="quick-action" onclick="openCustomLink('https://maps.google.com')">🗺️ マップ</a>
+            <a href="#" class="quick-action" onclick="openCustomLink('https://weather.yahoo.co.jp')">☀️ 天気</a>
+        </div>
+    </div>
+    
+    <br>
+
+    <div class="search-bar">
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="sites.json のURLを入力" id="jsonUrlInput">
+            <button class="search-btn" onclick="fetchSiteGroups()">📥 読み込み</button>
         </div>
     </div>
 
     <script>
-        let sites = JSON.parse(localStorage.getItem('sites') || '[]');
+        let siteJsonUrl = 'sites.json'; // デフォルトURL
+
+        async function fetchSiteGroups() {
+            const inputUrl = document.getElementById('jsonUrlInput')?.value.trim();
+            if (inputUrl) siteJsonUrl = inputUrl;
+            try {
+                const res = await fetch(siteJsonUrl);
+                if (!res.ok) throw new Error(res.statusText);
+                const data = await res.json();
+                renderGroups(data);
+            } catch (e) {
+                console.error('サイトリストの読み込みに失敗しました', e);
+                alert('サイトリストの読み込みに失敗しました: ' + e.message);
+            }
+        }
+
+        function createLinkCard(site) {
+            return `
+        <a href="#" class="link-card" onclick="openCustomLink('${site.url}')">
+          <div class="link-title">${site.title}</div>
+          <div class="link-description">${site.description}</div>
+        </a>`;
+        }
+
+        function renderGroups(data) {
+            const dashboard = document.getElementById('dashboardContainer');
+            dashboard.innerHTML = '';
+            Object.keys(data).forEach(groupName => {
+                const section = document.createElement('div');
+                section.className = 'section';
+
+                const header = document.createElement('h2');
+                header.textContent = groupName;
+                section.appendChild(header);
+
+                const grid = document.createElement('div');
+                grid.className = 'links-grid';
+                data[groupName].forEach(site => grid.innerHTML += createLinkCard(site));
+
+                section.appendChild(grid);
+                dashboard.appendChild(section);
+            });
+        }
 
         function updateDateTime() {
             const now = new Date();
-            document.getElementById('dateTime').textContent = now.toLocaleString('ja-JP', {
-                year: 'numeric', month: 'long', day: 'numeric', weekday: 'long', hour: '2-digit', minute: '2-digit', second: '2-digit'
-            });
-        }
-        setInterval(updateDateTime, 1000);
-        updateDateTime();
-
-        function renderSites() {
-            const container = document.getElementById('siteList');
-            container.innerHTML = '';
-            sites.forEach((site, i) => {
-                const card = document.createElement('div');
-                card.className = 'link-card';
-                card.innerHTML = `
-                    <div class="link-title">${site.title}</div>
-                    <div class="link-description">${site.description}</div>
-                    <a href="${site.url}" target="_blank">🔗 開く</a>
-                    <br><button onclick="removeSite(${i})">🗑️削除</button>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function addSite() {
-            const title = document.getElementById('siteTitle').value;
-            const url = document.getElementById('siteURL').value;
-            const description = document.getElementById('siteDesc').value;
-            if (!title || !url) return alert('タイトルとURLは必須です');
-            sites.push({ title, url, description });
-            localStorage.setItem('sites', JSON.stringify(sites));
-            renderSites();
-        }
-
-        function removeSite(index) {
-            sites.splice(index, 1);
-            localStorage.setItem('sites', JSON.stringify(sites));
-            renderSites();
-        }
-
-        function exportSites() {
-            const blob = new Blob([JSON.stringify(sites, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'sites.json';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        function importSites(event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
-            reader.onload = e => {
-                try {
-                    sites = JSON.parse(e.target.result);
-                    localStorage.setItem('sites', JSON.stringify(sites));
-                    renderSites();
-                } catch (err) {
-                    alert('JSON読み込みエラー');
-                }
+            const options = {
+                year: 'numeric', month: 'long', day: 'numeric', weekday: 'long',
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
             };
-            reader.readAsText(file);
+            document.getElementById('dateTime').textContent = now.toLocaleDateString('ja-JP', options);
         }
 
-        renderSites();
+        function performSearch() {
+            const query = document.getElementById('searchInput').value;
+            if (query.trim()) {
+                window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+            }
+        }
+
+        function openCustomLink(url) {
+            window.open(url, '_blank');
+        }
+
+        document.getElementById('searchInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') performSearch();
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchSiteGroups();
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+        });
     </script>
 </body>
+
 </html>
