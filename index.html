@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スタートダッシュボード（編集可能）</title>
+    <style>
+        /* --- 既存デザインそのまま --- */
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            min-height: 100vh;
+            color: #e0e0e0;
+            padding: 2rem;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 3rem; }
+        .header h1 { font-size: 3rem; font-weight: 300; margin-bottom: 0.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .header .date-time { font-size: 1.2rem; opacity: 0.9; }
+        .dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+        .section {
+            background: rgba(20, 20, 30, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section h2::before {
+            content: ''; width: 4px; height: 30px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            border-radius: 2px;
+        }
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        .link-card {
+            background: rgba(30, 30, 40, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: #e0e0e0;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            background: rgba(40, 40, 50, 0.8);
+        }
+        .link-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .link-description { font-size: 0.9rem; opacity: 0.8; line-height: 1.4; }
+        .editor { margin-bottom: 2rem; text-align: center; }
+        .editor input, .editor textarea {
+            margin: 0.5rem; padding: 0.5rem; border-radius: 5px; border: none;
+        }
+        .editor button {
+            background: #444; color: white; border: none; padding: 0.5rem 1rem;
+            border-radius: 5px; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>おかえりなさい</h1>
+            <div class="date-time" id="dateTime"></div>
+        </div>
+
+        <div class="editor">
+            <input type="text" id="siteTitle" placeholder="タイトル">
+            <input type="text" id="siteURL" placeholder="URL">
+            <input type="text" id="siteDesc" placeholder="説明">
+            <button onclick="addSite()">サイト追加</button>
+            <button onclick="exportSites()">JSON保存</button>
+            <input type="file" onchange="importSites(event)">
+        </div>
+
+        <div class="dashboard">
+            <div class="section">
+                <h2>🌐 サイト一覧</h2>
+                <div class="links-grid" id="siteList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let sites = JSON.parse(localStorage.getItem('sites') || '[]');
+
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('dateTime').textContent = now.toLocaleString('ja-JP', {
+                year: 'numeric', month: 'long', day: 'numeric', weekday: 'long', hour: '2-digit', minute: '2-digit', second: '2-digit'
+            });
+        }
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        function renderSites() {
+            const container = document.getElementById('siteList');
+            container.innerHTML = '';
+            sites.forEach((site, i) => {
+                const card = document.createElement('div');
+                card.className = 'link-card';
+                card.innerHTML = `
+                    <div class="link-title">${site.title}</div>
+                    <div class="link-description">${site.description}</div>
+                    <a href="${site.url}" target="_blank">🔗 開く</a>
+                    <br><button onclick="removeSite(${i})">🗑️削除</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function addSite() {
+            const title = document.getElementById('siteTitle').value;
+            const url = document.getElementById('siteURL').value;
+            const description = document.getElementById('siteDesc').value;
+            if (!title || !url) return alert('タイトルとURLは必須です');
+            sites.push({ title, url, description });
+            localStorage.setItem('sites', JSON.stringify(sites));
+            renderSites();
+        }
+
+        function removeSite(index) {
+            sites.splice(index, 1);
+            localStorage.setItem('sites', JSON.stringify(sites));
+            renderSites();
+        }
+
+        function exportSites() {
+            const blob = new Blob([JSON.stringify(sites, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'sites.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importSites(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    sites = JSON.parse(e.target.result);
+                    localStorage.setItem('sites', JSON.stringify(sites));
+                    renderSites();
+                } catch (err) {
+                    alert('JSON読み込みエラー');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        renderSites();
+    </script>
+</body>
+</html>
