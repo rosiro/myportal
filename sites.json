@@ -31,6 +31,16 @@
       "title": "Googleカレンダー",
       "url": "https://calendar.google.com",
       "description": "スケジュール管理"
-    }
+    },
+    {
+      "title": "Unity Publisher Sale",
+      "url": "H:\_TOOLS\AssetNotificator",
+      "description": "バッチファイル起動"
+    },
+    {
+      "title": "UE Free Asset",
+      "url": "H:\_TOOLS\AssetNotificator",
+      "description": "UEバッチファイル"
+    },
   ]
 }
