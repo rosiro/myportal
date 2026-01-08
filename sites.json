@@ -34,12 +34,12 @@
     },
     {
       "title": "Unity Publisher Sale",
-      "url": "https://",
+      "url": "https://example.com",
       "description": "バッチファイル起動"
     },
     {
       "title": "UE Free Asset",
-      "url": "http://",
+      "url": "http://example.com",
       "description": "UEバッチファイル"
     }
   ]
