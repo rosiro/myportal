@@ -34,12 +34,12 @@
     },
     {
       "title": "Unity Publisher Sale",
-      "url": "https://example.com",
+      "url": "file:///H:/_TOOLS/AssetNotificator/check-unity.bat",
       "description": "バッチファイル起動"
     },
     {
       "title": "UE Free Asset",
-      "url": "http://example.com",
+      "url": "file:///H:/_TOOLS/AssetNotificator/check-fab.bat",
       "description": "UEバッチファイル"
     }
   ]
