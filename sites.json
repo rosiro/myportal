@@ -34,13 +34,13 @@
     },
     {
       "title": "Unity Publisher Sale",
-      "url": "H:\_TOOLS\AssetNotificator",
+      "url": "_TOOLS\AssetNotificator",
       "description": "バッチファイル起動"
     },
     {
       "title": "UE Free Asset",
-      "url": "H:\_TOOLS\AssetNotificator",
+      "url": "_TOOLS\AssetNotificator",
       "description": "UEバッチファイル"
-    },
+    }
   ]
 }
